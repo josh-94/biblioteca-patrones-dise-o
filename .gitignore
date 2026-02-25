@@ -1,0 +1,19 @@
+# Archivos compilados Java
+*.class
+out/
+
+# Credenciales — NO subir al repo
+db.properties
+
+# Archivos temporales
+*.log
+*.txt
+salida.txt
+output.txt
+output.log
+
+# Archivos de prueba temporal
+TestJdbc.java
+
+# ZIP duplicado
+files.zip

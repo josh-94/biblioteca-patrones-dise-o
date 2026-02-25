@@ -1,0 +1,128 @@
+erDiagram
+
+    ROLES {
+        int id_rol PK
+        varchar nombre
+        varchar descripcion
+        int max_libros
+        int dias_prestamo
+    }
+
+    CARRERAS {
+        int id_carrera PK
+        varchar nombre
+        varchar facultad
+        boolean activo
+    }
+
+    CONFIGURACION_MULTAS {
+        int id_config PK
+        numeric monto_por_dia
+        varchar moneda
+        varchar descripcion
+        boolean vigente
+        date fecha_desde
+    }
+
+    USUARIOS {
+        int id_usuario PK
+        varchar codigo
+        varchar nombres
+        varchar apellidos
+        varchar email
+        varchar telefono
+        int id_rol FK
+        int id_carrera FK
+        boolean activo
+        timestamp fecha_registro
+    }
+
+    CATEGORIAS {
+        int id_categoria PK
+        varchar nombre
+        varchar descripcion
+    }
+
+    AUTORES {
+        int id_autor PK
+        varchar nombres
+        varchar apellidos
+        varchar nacionalidad
+    }
+
+    LIBROS {
+        int id_libro PK
+        varchar isbn
+        varchar titulo
+        varchar editorial
+        int anio_publicacion
+        varchar edicion
+        text descripcion
+        varchar ubicacion
+        boolean activo
+        timestamp fecha_registro
+    }
+
+    LIBROS_AUTORES {
+        int id_libro FK
+        int id_autor FK
+    }
+
+    LIBROS_CATEGORIAS {
+        int id_libro FK
+        int id_categoria FK
+    }
+
+    EJEMPLARES {
+        int id_ejemplar PK
+        int id_libro FK
+        varchar codigo_barras
+        varchar estado
+        date fecha_adquisicion
+        text observaciones
+    }
+
+    PRESTAMOS {
+        int id_prestamo PK
+        int id_usuario FK
+        timestamp fecha_prestamo
+        date fecha_devolucion_esperada
+        date fecha_devolucion_real
+        varchar estado
+        text observaciones
+        int registrado_por FK
+    }
+
+    DETALLE_PRESTAMO {
+        int id_detalle PK
+        int id_prestamo FK
+        int id_ejemplar FK
+        varchar estado_devolucion
+    }
+
+    MULTAS {
+        int id_multa PK
+        int id_prestamo FK
+        int id_usuario FK
+        int dias_retraso
+        numeric monto_total
+        boolean pagado
+        timestamp fecha_generada
+        timestamp fecha_pago
+        text observaciones
+    }
+
+    %% Relaciones
+    ROLES            ||--o{ USUARIOS            : "tiene"
+    CARRERAS         ||--o{ USUARIOS            : "pertenece"
+    USUARIOS         ||--o{ PRESTAMOS           : "realiza"
+    USUARIOS         ||--o{ PRESTAMOS           : "registrado_por"
+    USUARIOS         ||--o{ MULTAS              : "genera"
+    LIBROS           ||--o{ EJEMPLARES          : "tiene"
+    LIBROS           ||--o{ LIBROS_AUTORES      : "escrito por"
+    AUTORES          ||--o{ LIBROS_AUTORES      : "escribe"
+    LIBROS           ||--o{ LIBROS_CATEGORIAS   : "clasificado en"
+    CATEGORIAS       ||--o{ LIBROS_CATEGORIAS   : "clasifica"
+    PRESTAMOS        ||--o{ DETALLE_PRESTAMO    : "incluye"
+    EJEMPLARES       ||--o{ DETALLE_PRESTAMO    : "en"
+    PRESTAMOS        ||--o{ MULTAS              : "genera"
